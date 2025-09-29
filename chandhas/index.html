@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chandhas Identifier</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Chandhas Identifier</h1>
+            <p class="subtitle">Identify the metrical pattern of Sanskrit poetry</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="text">Text Input</button>
+                    <button class="tab-btn" data-tab="image">Image Upload</button>
+                </div>
+
+                <div class="tab-content active" id="text-tab">
+                    <div class="text-input-container">
+                        <div class="sample-texts">
+                            <h4>Sample Sanskrit Texts</h4>
+                            <div class="sample-buttons">
+                                <button class="sample-btn" data-text="गायत्री मंत्र">Gayatri Mantra</button>
+                                <button class="sample-btn" data-text="रामायण श्लोक">Ramayana Shloka</button>
+                                <button class="sample-btn" data-text="भगवद्गीता श्लोक">Bhagavad Gita</button>
+                                <button class="sample-btn" data-text="वैदिक मंत्र">Vedic Mantra</button>
+                                <button class="sample-btn" data-text="Test Simple">Test Simple</button>
+                            </div>
+                        </div>
+                        <textarea id="sanskrit-text" placeholder="Enter Sanskrit text here or select a sample above..."></textarea>
+                        <button id="analyze-text-btn" class="primary-btn">Analyze</button>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="image-tab">
+                    <div class="upload-container">
+                        <div class="upload-area" id="upload-area">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p>Drag & drop an image or <span class="browse-text">browse</span></p>
+                            <input type="file" id="file-input" accept="image/*" hidden>
+                        </div>
+                        <div class="preview-container" id="preview-container" hidden>
+                            <img id="preview-image" src="" alt="Preview">
+                            <button id="remove-image-btn" class="icon-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <button id="analyze-image-btn" class="primary-btn" disabled>Analyze Image</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-section" id="result-section" hidden>
+                <h2>Analysis Results</h2>
+                <div class="result-content">
+                    <div class="result-card">
+                        <h3>Identified Chandhas</h3>
+                        <p id="chandhas-type">-</p>
+                    </div>
+                    <div class="result-card">
+                        <h3>Pattern</h3>
+                        <div id="pattern-display">-</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Details</h3>
+                        <p id="chandhas-details">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="loading-indicator" id="loading-indicator" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyzing...</p>
+            </div>
+        </main>
+
+        <section class="info-section">
+            <h2>About Chandhas Shastra</h2>
+            <p>Chandhas Shastra (Prosody in English) is the study of rhythms in poetry. In Sanskrit poetry, syllables are classified as laghu (Short) or guru (Long), and the patterns of these syllables determine the type of chandhas.</p>
+            <p>Understanding guru and laghu syllables is essential for proper pronunciation and correct recitation of poetry in the majority of Indian languages.</p>
+            <p>Acharya Pingala's Chandhas shastra is a seminal work that describes these patterns in detail and has early instances of binary numbers, combinatorial mathematics, and binomial coefficients. It also introduces the concept called 'Meru prastara' (Pascal's triangle) at least 1.5 millennia before Pascal.</p>
+            
+            <div class="rules-section">
+                <h3>Rules for Identifying Laghu and Guru Syllables</h3>
+                <div class="rules-grid">
+                    <div class="rule-card">
+                        <h4>Laghu (Short) Syllables</h4>
+                        <ul>
+                            <li>Short vowels (अ, इ, उ, ऋ, ऌ) are laghu</li>
+                            <li>A short vowel at the end of a word is laghu</li>
+                            <li>A short vowel followed by a single consonant is laghu</li>
+                        </ul>
+                    </div>
+                    <div class="rule-card">
+                        <h4>Guru (Long) Syllables</h4>
+                        <ul>
+                            <li>Long vowels (आ, ई, ऊ, ॠ, ॡ, ए, ऐ, ओ, औ) are guru</li>
+                            <li>A short vowel followed by a conjunct consonant is guru</li>
+                            <li>A short vowel followed by anusvara (ं) or visarga (ः) is guru</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chandhas-types">
+                <h3>Common Chandhas Types</h3>
+                <div class="chandhas-grid">
+                    <div class="chandhas-card">
+                        <h4>Anushtup (Shloka)</h4>
+                        <p>8 syllables per quarter (pada), totaling 32 syllables</p>
+                        <p class="pattern-example">5th syllable should be laghu, 6th guru, and 7th laghu in each pada</p>
+                    </div>
+                    <div class="chandhas-card">
+                        <h4>Gayatri</h4>
+                        <p>8 syllables per pada, totaling 24 syllables (3 padas)</p>
+                        <p class="pattern-example">Used in the famous Gayatri mantra</p>
+                    </div>
+                    <div class="chandhas-card">
+                        <h4>Trishtup</h4>
+                        <p>11 syllables per pada, totaling 44 syllables</p>
+                        <p class="pattern-example">Common in Vedic literature</p>
+                    </div>
+                    <div class="chandhas-card">
+                        <h4>Jagati</h4>
+                        <p>12 syllables per pada, totaling 48 syllables</p>
+                        <p class="pattern-example">Often used for descriptive poetry</p>
+                    </div>
+                    <div class="chandhas-card">
+                        <h4>Brihati</h4>
+                        <p>9 syllables per pada, totaling 36 syllables</p>
+                        <p class="pattern-example">Used in various Vedic hymns</p>
+                    </div>
+                    <div class="chandhas-card">
+                        <h4>Pankti</h4>
+                        <p>10 syllables per pada, totaling 40 syllables</p>
+                        <p class="pattern-example">Used in various Sanskrit compositions</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="historical-section">
+                <h3>Historical Significance</h3>
+                <p>Chandhas Shastra is not just about poetry but also contains early mathematical concepts:</p>
+                <ul>
+                    <li>Binary number representation (1.5 millennia before the West)</li>
+                    <li>Combinatorial mathematics for calculating possible patterns</li>
+                    <li>The Meru Prastara (Pascal's Triangle) for calculating combinations</li>
+                    <li>Fibonacci sequence applications in metrical patterns</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2023 Chandhas Identifier | Created with ❤️ for Sanskrit Poetry</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
